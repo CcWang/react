@@ -10,7 +10,7 @@ var CommentBox=React.createClass({
 		return (
 			// classname begin with an lower case
 			<div className='commentBox'>
-				<h1>Hello, This is a commnet box</h1>
+				<h1>Hello, This is a commnet box. Tring React</h1>
 			</div>
 		);
 	}

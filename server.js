@@ -34,18 +34,16 @@ app.use(function(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
-app.post('/testing/',function(req,res){
-	console.log(req.body);
-})
-// app.get('/api/comments', function(req, res) {
-//   fs.readFile(COMMENTS_FILE, function(err, data) {
-//     if (err) {
-//       console.error(err);
-//       process.exit(1);
-//     }
-//     res.json(JSON.parse(data));
-//   });
-// });
+
+app.get('/api/comments', function(req, res) {
+  fs.readFile(COMMENTS_FILE, function(err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.json(JSON.parse(data));
+  });
+});
 
 // app.post('/api/comments', function(req, res) {
 //   fs.readFile(COMMENTS_FILE, function(err, data) {

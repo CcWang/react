@@ -60,3 +60,7 @@ ul {
 .commentList{
   color:red;
 }
+.commentAuthor{
+  font-weight: bold;
+  font-style: italic;
+}

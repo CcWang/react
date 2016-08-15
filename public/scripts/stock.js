@@ -34,7 +34,7 @@ var ProductList=React.createClass({
 		var rows=[]
 		var lastCategory = null;
 		this.props.products.forEach(function(p){
-			// console.log(p)
+			//console.log(p.name);
 			if(p.name.indexOf(this.props.filterText) === -1 || (!p.stocked && this.props.inStockOnly)){
 				return;
 			}
@@ -43,7 +43,7 @@ var ProductList=React.createClass({
 			}
 			rows.push(<ProductRow product={p} key={p.name} />);
 			lastCategory=p.category;
-			console.log(rows);
+		
 		}.bind(this));
 		return(
 			<table>
@@ -85,15 +85,27 @@ var ProductRow = React.createClass({
 var SearchBar = React.createClass({
 	handleChange:function(){
 		this.props.onUserInput(
-			console.log(this.refs.inStockOnlyInput.checked)
+			this.refs.filterTextInput.value,
+			this.refs.inStockOnlyInput.checked
 		);
+		console.log(this.refs.filterTextInput.value,
+			this.refs.inStockOnlyInput.checked)
 	},
   render: function() {
     return (
       <form>
-        <input type="text" placeholder="Search..." value={this.props.filterText}/>
+        <input type="text" 
+        	placeholder="Search..." 
+        	value={this.props.filterText}
+        	ref="filterTextInput"
+        	onChange={this.handleChange}
+        />
         <p>
-          <input type="checkbox" checked={this.props.inStockOnly} ref='inStockOnlyInput' onChange={this.handleChange}/>
+          <input 
+          	type="checkbox" 
+          	checked={this.props.inStockOnly} 
+          	ref="inStockOnlyInput" 
+          	onChange={this.handleChange}/>
           {' '}
           Only show products in stock
         </p>

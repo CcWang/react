@@ -68,6 +68,7 @@ var ProductCategory = React.createClass({
 });
 var ProductRow = React.createClass({
 	render:function(){
+	// if this.props.product.stocked is True, return return whatever after '?' but before ':', else return whatever after ':'
 	var name = this.props.product.stocked ? this.props.product.name:<span style={{color:'red'}}> {this.props.product.name} </span>
 		return(
 			<tr>
@@ -93,10 +94,19 @@ var SearchBar = React.createClass({
   }
 });
 var ProductsFile = React.createClass({
+	getInitialState:function(){
+		return{
+			filterText:'',
+			inStockOnly:false
+		};
+	},
 	render:function(){
 		return(
 			<div>
-				<SearchBar />
+				<SearchBar 
+					filterText={this.state.filterText} 
+					inStockOnly={this.state.inStockOnly}
+				/>
 				<ProductList products={this.props.hello}/>
 			</div>
 		);

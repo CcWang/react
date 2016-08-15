@@ -29,18 +29,22 @@ var ProductSearch=React.createClass({
 	}
 });
 var ProductList=React.createClass({
+
 	render:function(){
 		var rows=[]
 		var lastCategory = null;
 		this.props.products.forEach(function(p){
 			// console.log(p)
+			if(p.name.indexOf(this.props.filterText) === -1 || (!p.stocked && this.props.inStockOnly)){
+				return;
+			}
 			if (p.category !==lastCategory){
 				rows.push(<ProductCategory category={p.category} key={p.category} />);
 			}
 			rows.push(<ProductRow product={p} key={p.name} />);
 			lastCategory=p.category;
 			console.log(rows);
-		});
+		}.bind(this));
 		return(
 			<table>
 				<thead>
@@ -79,12 +83,17 @@ var ProductRow = React.createClass({
 	}
 });
 var SearchBar = React.createClass({
+	handleChange:function(){
+		this.props.onUserInput(
+			console.log(this.refs.inStockOnlyInput.checked)
+		);
+	},
   render: function() {
     return (
       <form>
-        <input type="text" placeholder="Search..." />
+        <input type="text" placeholder="Search..." value={this.props.filterText}/>
         <p>
-          <input type="checkbox" />
+          <input type="checkbox" checked={this.props.inStockOnly} ref='inStockOnlyInput' onChange={this.handleChange}/>
           {' '}
           Only show products in stock
         </p>
@@ -100,14 +109,25 @@ var ProductsFile = React.createClass({
 			inStockOnly:false
 		};
 	},
+	handleUserInput:function(filterText,inStockOnly){
+		this.setState({
+			filterText:filterText,
+			inStockOnly:inStockOnly
+		});
+	},
 	render:function(){
 		return(
 			<div>
 				<SearchBar 
 					filterText={this.state.filterText} 
 					inStockOnly={this.state.inStockOnly}
+					onUserInput={this.handleUserInput}
 				/>
-				<ProductList products={this.props.hello}/>
+				<ProductList 
+					products={this.props.hello}
+					filterText={this.state.filterText} 
+					inStockOnly={this.state.inStockOnly}
+				/>
 			</div>
 		);
 	}

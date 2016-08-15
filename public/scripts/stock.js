@@ -83,7 +83,9 @@ var ProductRow = React.createClass({
 	}
 });
 var SearchBar = React.createClass({
+
 	handleChange:function(){
+	//called parent onUserInput function, to set the state value, then the state value pass to product list as this.props values
 		this.props.onUserInput(
 			this.refs.filterTextInput.value,
 			this.refs.inStockOnlyInput.checked

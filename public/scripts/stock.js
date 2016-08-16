@@ -71,6 +71,9 @@ var ProductCategory = React.createClass({
 	}
 });
 var ProductRow = React.createClass({
+	delete_p:function(){
+		console.log(this.props.product)
+	},
 	render:function(){
 	// if this.props.product.stocked is True, return return whatever after '?' but before ':', else return whatever after ':'
 	var name = this.props.product.stocked ? this.props.product.name:<span style={{color:'red'}}> {this.props.product.name} </span>
@@ -78,10 +81,12 @@ var ProductRow = React.createClass({
 			<tr>
 				<td>{name}</td>
 				<td>{this.props.product.price}</td>
+				<td><button style={{color:'red'}} onClick={this.delete_p} >X</button></td>
 			</tr>
 		);
 	}
 });
+
 var SearchBar = React.createClass({
 
 	handleChange:function(){
@@ -129,6 +134,11 @@ var ProductsFile = React.createClass({
 			inStockOnly:inStockOnly
 		});
 	},
+	handleDelete:function(product){
+		this.setState({
+			product:product
+		})
+	},
 	render:function(){
 		return(
 			<div>
@@ -141,6 +151,7 @@ var ProductsFile = React.createClass({
 					products={this.props.hello}
 					filterText={this.state.filterText} 
 					inStockOnly={this.state.inStockOnly}
+					deleteP={this.handleDelete}
 				/>
 			</div>
 		);

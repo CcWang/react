@@ -5,6 +5,7 @@
 		-ProductCategory
 		-ProductRow
 ***/
+
 var PRODUCTS=[
 	{category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football"},
   	{category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball"},
@@ -28,6 +29,7 @@ var ProductSearch=React.createClass({
 		);
 	}
 });
+
 var ProductList=React.createClass({
 
 	render:function(){
@@ -38,13 +40,16 @@ var ProductList=React.createClass({
 			if(p.name.indexOf(this.props.filterText) === -1 || (!p.stocked && this.props.inStockOnly)){
 				return;
 			}
+			if (p.name === this.props.product){
+				return;
+			}
 			if (p.category !==lastCategory){
 				rows.push(<ProductCategory category={p.category} key={p.category} />);
 			}
-			rows.push(<ProductRow product={p} key={p.name} />);
+			rows.push(<ProductRow product={p} key={p.name} deleteP={this.props.deleteP}/>);
 			lastCategory=p.category;
-		
 		}.bind(this));
+
 		return(
 			<table>
 				<thead>
@@ -52,7 +57,6 @@ var ProductList=React.createClass({
 						<th>Name</th>
 						<th>Price</th>
 					</tr>
-					
 				</thead>
 				<tbody>
 				{rows}
@@ -61,6 +65,7 @@ var ProductList=React.createClass({
 		);
 	}
 });
+
 var ProductCategory = React.createClass({
 	render:function(){
 		return (
@@ -70,13 +75,22 @@ var ProductCategory = React.createClass({
 		);
 	}
 });
+
 var ProductRow = React.createClass({
 	delete_p:function(){
-		console.log(this.props.product)
+		this.props.deleteP(this.props.product.name)
 	},
+
 	render:function(){
 	// if this.props.product.stocked is True, return return whatever after '?' but before ':', else return whatever after ':'
-	var name = this.props.product.stocked ? this.props.product.name:<span style={{color:'red'}}> {this.props.product.name} </span>
+	var name = this.props.product.stocked ? 
+		this.props.product.name :
+		(
+		<span style={{color:'red'}}> 
+			{this.props.product.name} 
+		</span>
+		)
+
 		return(
 			<tr>
 				<td>{name}</td>
@@ -98,6 +112,7 @@ var SearchBar = React.createClass({
 		console.log(this.refs.filterTextInput.value,
 			this.refs.inStockOnlyInput.checked)
 	},
+
   render: function() {
     return (
       <form>
@@ -121,11 +136,13 @@ var SearchBar = React.createClass({
     );
   }
 });
+
 var ProductsFile = React.createClass({
 	getInitialState:function(){
 		return{
 			filterText:'',
-			inStockOnly:false
+			inStockOnly:false,
+			product: null
 		};
 	},
 	handleUserInput:function(filterText,inStockOnly){
@@ -137,7 +154,10 @@ var ProductsFile = React.createClass({
 	handleDelete:function(product){
 		this.setState({
 			product:product
-		})
+		}, function() {
+
+		console.log(this.state.product);
+		}.bind(this));
 	},
 	render:function(){
 		return(
@@ -151,7 +171,9 @@ var ProductsFile = React.createClass({
 					products={this.props.hello}
 					filterText={this.state.filterText} 
 					inStockOnly={this.state.inStockOnly}
+					product={this.state.product}
 					deleteP={this.handleDelete}
+
 				/>
 			</div>
 		);

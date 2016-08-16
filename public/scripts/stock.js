@@ -40,7 +40,7 @@ var ProductList=React.createClass({
 			if(p.name.indexOf(this.props.filterText) === -1 || (!p.stocked && this.props.inStockOnly)){
 				return;
 			}
-			if (p.name === this.props.product){
+			if (this.props.deleted[p.name]){
 				return;
 			}
 			if (p.category !==lastCategory){
@@ -142,7 +142,7 @@ var ProductsFile = React.createClass({
 		return{
 			filterText:'',
 			inStockOnly:false,
-			product: null
+			deleted: {}
 		};
 	},
 	handleUserInput:function(filterText,inStockOnly){
@@ -151,13 +151,14 @@ var ProductsFile = React.createClass({
 			inStockOnly:inStockOnly
 		});
 	},
-	handleDelete:function(product){
+	handleDelete:function(product_name){
+		var deleted = this.state.deleted;
+		deleted[product_name] = 1;
 		this.setState({
-			product:product
-		}, function() {
-
-		console.log(this.state.product);
-		}.bind(this));
+			deleted: deleted
+		},function(){
+			console.log(this.state.deleted)
+		}.bind(this))
 	},
 	render:function(){
 		return(
@@ -171,7 +172,7 @@ var ProductsFile = React.createClass({
 					products={this.props.hello}
 					filterText={this.state.filterText} 
 					inStockOnly={this.state.inStockOnly}
-					product={this.state.product}
+					deleted={this.state.deleted}
 					deleteP={this.handleDelete}
 
 				/>

@@ -1,17 +1,17 @@
 var WholeList = React.createClass({
   getInitialState:function(){
     return{
-      tasksList:[{'name':'this is tasks1','completed':false}]
+      tasksList:[
+        {'name':'this is tasks1','completed':false},
+        {'name':'this is tasks2','completed':true}]
     };
   },
   handleAddTask:function(taskName){
-    console.log('taskName',taskName)
     var newTask={'name':taskName,'completed':false}
-    console.log('new Task',newTask)
-    var tasksListNew = this.state.tasksList.push(newTask)
-    console.log('new Task list',tasksListNew)
+    var tasksListNew = this.state.tasksList
+    tasksListNew.push(newTask)
     this.setState({
-      tasksList:[{'name':'this is tasks1','completed':false},{'name':'this is taks2','completed':false}]
+      tasksList:tasksListNew
     },function(){
       console.log(this.state.tasksList)
     }.bind(this));
@@ -48,16 +48,25 @@ var SearchBar=React.createClass({
 });
 var TodoList=React.createClass({
   render:function () {
-    var row=[]
+    var rowU=[]
+    var rowC=[]
+
     if (this.props.tasksList){
       this.props.tasksList.forEach(function(t){
-        row.push(<Task task={t} key={t.name}/>)
+        console.log(t.name)
+        if (t.completed){
+          rowC.push(<TaskC task={t} key={t.name}/>)
+        }else{
+          rowU.push(<Task task={t} key={t.name}/>)
+
+        }
       }.bind(this));
     };
     return(
       <table>
         <tbody>
-          {row}
+          {rowU}
+          {rowC}
         </tbody>
       </table>
     );
@@ -69,15 +78,52 @@ var Task = React.createClass({
   },
   render:function () {
     return(
-      <tr><td> <span className='glyphicon glyphicon-ok' style={{color:'grey'}}></span> {this.props.task.name} <span className='glyphicon glyphicon-remove' style={{color:'grey'}} onClick={this.handleRemove}></span></td></tr>
+      <tr>
+        <td>
+          <span
+            className='glyphicon glyphicon-ok'
+            style={{color:'grey'}}>
+          </span> {this.props.task.name}
+          <span
+            className='glyphicon glyphicon-remove'
+            style={{color:'grey'}}
+            onClick={this.handleRemove}>
+
+          </span>
+        </td>
+      </tr>
+    );
+  }
+});
+var TaskC = React.createClass({
+  handleRemove:function(){
+    console.log('remove')
+  },
+  render:function () {
+    return(
+      <tr style={{'background-color':'lightblue'}}>
+        <td className="completed">
+          <span
+            className='glyphicon glyphicon-ok'
+            style={{color:'grey'}}>
+          </span> {this.props.task.name}
+          <span
+            className='glyphicon glyphicon-remove'
+            style={{color:'grey'}}
+            onClick={this.handleRemove}>
+
+          </span>
+        </td>
+      </tr>
     );
   }
 });
 
 var AddTask = React.createClass({
   handleChange:function(){
-    this.props.handleAddTask(this.refs.newTaskName.name);
+    this.props.handleAddTask(this.refs.newTaskName.value);
     //console.log(this.refs.newTaskName.value)
+    this.refs.newTaskName.value=''
   },
   render:function(){
     return(

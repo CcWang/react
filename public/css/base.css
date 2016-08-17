@@ -64,3 +64,6 @@ ul {
   font-weight: bold;
   font-style: italic;
 }
+.completed {
+  text-decoration: line-through;
+}

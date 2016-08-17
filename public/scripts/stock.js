@@ -83,11 +83,11 @@ var ProductRow = React.createClass({
 
 	render:function(){
 	// if this.props.product.stocked is True, return return whatever after '?' but before ':', else return whatever after ':'
-	var name = this.props.product.stocked ? 
+	var name = this.props.product.stocked ?
 		this.props.product.name :
 		(
-		<span style={{color:'red'}}> 
-			{this.props.product.name} 
+		<span style={{color:'red'}}>
+			{this.props.product.name}
 		</span>
 		)
 
@@ -116,22 +116,22 @@ var SearchBar = React.createClass({
   render: function() {
     return (
       <form>
-        <input type="text" 
-        	placeholder="Search..." 
+        <input type="text"
+        	placeholder="Search..."
         	value={this.props.filterText}
         	ref="filterTextInput"
         	onChange={this.handleChange}
         />
         <p>
-          <input 
-          	type="checkbox" 
-          	checked={this.props.inStockOnly} 
-          	ref="inStockOnlyInput" 
+          <input
+          	type="checkbox"
+          	checked={this.props.inStockOnly}
+          	ref="inStockOnlyInput"
           	onChange={this.handleChange}/>
           {' '}
           Only show products in stock
         </p>
-      
+
       </form>
     );
   }
@@ -163,14 +163,14 @@ var ProductsFile = React.createClass({
 	render:function(){
 		return(
 			<div>
-				<SearchBar 
-					filterText={this.state.filterText} 
+				<SearchBar
+					filterText={this.state.filterText}
 					inStockOnly={this.state.inStockOnly}
 					onUserInput={this.handleUserInput}
 				/>
-				<ProductList 
+				<ProductList
 					products={this.props.hello}
-					filterText={this.state.filterText} 
+					filterText={this.state.filterText}
 					inStockOnly={this.state.inStockOnly}
 					deleted={this.state.deleted}
 					deleteP={this.handleDelete}

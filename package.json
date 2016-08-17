@@ -7,6 +7,7 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.4.3",
+    "bootstrap": "^3.3.7",
     "express": "^4.4.5"
   },
   "devDependencies": {},
@@ -29,7 +30,7 @@
     "url": "https://github.com/reactjs/react-tutorial/issues"
   },
   "homepage": "https://github.com/reactjs/react-tutorial",
-  "engines" : {
-    "node" : "0.12.x"
+  "engines": {
+    "node": "0.12.x"
   }
 }

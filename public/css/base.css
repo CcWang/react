@@ -67,3 +67,6 @@ ul {
 .completed {
   text-decoration: line-through;
 }
+.glyphicon {
+  opacity: 0.5;
+}

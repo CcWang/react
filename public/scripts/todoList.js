@@ -17,7 +17,6 @@ var WholeList = React.createClass({
     }.bind(this));
   },
   handleComplete:function(taskName){
-    console.log(taskName)
     var tasksListNew=this.state.tasksList
     tasksListNew.forEach(function(p){
       if (p.name ===taskName){
@@ -28,6 +27,18 @@ var WholeList = React.createClass({
       tasksList:tasksListNew
     })
   },
+  handleRemove:function(taskName){
+    var tasksListNew=this.state.tasksList
+    for(var i=0;i<tasksListNew.length;i++){
+      if (tasksListNew[i].name === taskName ) {
+        tasksListNew.splice(i,1);
+      }
+    }
+    this.setState({
+      tasksList:tasksListNew
+    })
+
+  },
   render:function(){
     return (
       <div>
@@ -36,6 +47,7 @@ var WholeList = React.createClass({
       <TodoList
         tasksList={this.state.tasksList}
         handleComplete={this.handleComplete}
+        handleRemove={this.handleRemove}
       />
       <AddTask
         tasksList={this.state.tasksList} handleAddTask={this.handleAddTask}
@@ -69,9 +81,13 @@ var TodoList=React.createClass({
     if (this.props.tasksList){
       this.props.tasksList.forEach(function(t){
         if (t.completed){
-          rowC.push(<TaskC task={t} key={t.name} handleComplete={this.props.handleComplete}/>)
+          rowC.push(<TaskC task={t} key={t.name} handleComplete={this.props.handleComplete}
+          handleRemove={this.props.handleRemove}
+            />)
         }else{
-          rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}/>)
+          rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
+          handleRemove={this.props.handleRemove}
+          />)
 
         }
       }.bind(this));
@@ -88,7 +104,7 @@ var TodoList=React.createClass({
 });
 var Task = React.createClass({
   handleRemove:function(){
-    console.log('remove')
+    this.props.handleRemove(this.props.task.name)
   },
   handleComplete:function(){
     this.props.handleComplete(this.props.task.name);
@@ -113,7 +129,7 @@ var Task = React.createClass({
 });
 var TaskC = React.createClass({
   handleRemove:function(){
-    console.log('remove')
+    this.props.handleRemove(this.props.task.name)
   },
   handleComplete:function(){
     this.props.handleComplete(this.props.task.name);
@@ -121,9 +137,11 @@ var TaskC = React.createClass({
   render:function () {
     return(
       <tr style={{'backgroundColor':'lightblue'}}>
-        <td className="completed" onClick={this.handleComplete}>
+        <td className="completed" >
           <span
-            className='glyphicon glyphicon-ok'>
+            className='glyphicon glyphicon-ok'
+            onClick={this.handleComplete}
+            >
           </span> {this.props.task.name}
           <span
             className='glyphicon glyphicon-remove'

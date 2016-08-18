@@ -3,7 +3,10 @@ var WholeList = React.createClass({
     return{
       tasksList:[
         {'name':'this is tasks1','completed':false},
-        {'name':'this is tasks2','completed':true}]
+        {'name':'this is tasks2','completed':true}],
+      showComplete:false,
+      showUncomplete:false,
+      filterText:''
     };
   },
   handleAddTask:function(taskName){
@@ -39,15 +42,33 @@ var WholeList = React.createClass({
     })
 
   },
+  handleShowComplete:function(checked){
+      this.setState({
+        showComplete:checked
+      })
+  },
+  handleShowUncomplete:function(checked){
+    this.setState({
+      showUncomplete:checked
+    })
+  },
   render:function(){
     return (
       <div>
       <h1> This is TO DO List </h1>
-      <SearchBar tasksList={this.state.tasksList}/>
+      <SearchBar
+        tasksList={this.state.tasksList}
+        showComplete={this.state.showComplete}
+        showUncomplete={this.state.showUncomplete}
+        handleShowComplete={this.handleShowComplete}
+        handleShowUncomplete={this.handleShowUncomplete}
+        />
       <TodoList
         tasksList={this.state.tasksList}
         handleComplete={this.handleComplete}
         handleRemove={this.handleRemove}
+        showComplete={this.state.showComplete}
+        showUncomplete={this.state.showUncomplete}
       />
       <AddTask
         tasksList={this.state.tasksList} handleAddTask={this.handleAddTask}
@@ -57,16 +78,30 @@ var WholeList = React.createClass({
   }
 });
 var SearchBar=React.createClass({
+  handleComplete:function(){
+    this.props.handleShowComplete(this.refs.checkedComplete.checked)
+  },
+  handleUncomplete:function(){
+    this.props.handleShowUncomplete(this.refs.checkedUncomplete.checked)
+  },
   render:function(){
     return(
       <form>
         <input type='text' placeholder='Search your to do list...'/>
         <p>
-          <input type='checkbox'/>
+          <input type='checkbox'
+          checked={this.props.showComplete}
+          ref='checkedComplete'
+          onChange={this.handleComplete}
+          />
           Only show completed
         </p>
         <p>
-          <input type='checkbox'/>
+        <input type='checkbox'
+        checked={this.props.showUncomplete}
+        ref='checkedUncomplete'
+        onChange={this.handleUncomplete}
+        />
           Only show uncompleted
         </p>
       </form>
@@ -77,7 +112,7 @@ var TodoList=React.createClass({
   render:function () {
     var rowU=[]
     var rowC=[]
-
+    var rows=[]
     if (this.props.tasksList){
       this.props.tasksList.forEach(function(t){
         if (t.completed){
@@ -86,17 +121,25 @@ var TodoList=React.createClass({
             />)
         }else{
           rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
-          handleRemove={this.props.handleRemove}
-          />)
-
+            handleRemove={this.props.handleRemove}
+            />)
         }
       }.bind(this));
+      if (this.props.showUncomplete && this.props.showComplete ) {
+        rows=[]
+      }else if (this.props.showComplete) {
+        rows=rowC
+      }else if(this.props.showUncomplete){
+        rows=rowU
+
+      }else{
+        rows.push(rowU,rowC)
+      };
     };
     return(
       <table>
         <tbody>
-          {rowU}
-          {rowC}
+        {rows}
         </tbody>
       </table>
     );

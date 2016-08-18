@@ -1,9 +1,7 @@
 var WholeList = React.createClass({
   getInitialState:function(){
     return{
-      tasksList:[
-        {'name':'this is tasks1','completed':false},
-        {'name':'this is tasks2','completed':true}],
+      tasksList:[],
       showComplete:false,
       showUncomplete:false,
       filterText:''
@@ -52,6 +50,12 @@ var WholeList = React.createClass({
       showUncomplete:checked
     })
   },
+  handleFilter:function(text){
+
+    this.setState({
+      filterText:text
+    })
+  },
   render:function(){
     return (
       <div>
@@ -62,6 +66,8 @@ var WholeList = React.createClass({
         showUncomplete={this.state.showUncomplete}
         handleShowComplete={this.handleShowComplete}
         handleShowUncomplete={this.handleShowUncomplete}
+        filterText={this.state.filterText}
+        handleFilter={this.handleFilter}
         />
       <TodoList
         tasksList={this.state.tasksList}
@@ -69,6 +75,7 @@ var WholeList = React.createClass({
         handleRemove={this.handleRemove}
         showComplete={this.state.showComplete}
         showUncomplete={this.state.showUncomplete}
+        filterText={this.state.filterText}
       />
       <AddTask
         tasksList={this.state.tasksList} handleAddTask={this.handleAddTask}
@@ -84,10 +91,19 @@ var SearchBar=React.createClass({
   handleUncomplete:function(){
     this.props.handleShowUncomplete(this.refs.checkedUncomplete.checked)
   },
+  filter:function(){
+    this.props.handleFilter(this.refs.filterText.value)
+  },
   render:function(){
     return(
       <form>
-        <input type='text' placeholder='Search your to do list...'/>
+        <input
+        type='text'
+        placeholder='Search your to do list...'
+        value={this.props.filterText}
+        ref='filterText'
+        onChange={this.filter}
+        />
         <p>
           <input type='checkbox'
           checked={this.props.showComplete}
@@ -116,10 +132,16 @@ var TodoList=React.createClass({
     if (this.props.tasksList){
       this.props.tasksList.forEach(function(t){
         if (t.completed){
+          if (this.props.filterText && t.name.indexOf(this.props.filterText) ===-1 ) {
+            return;
+          }
           rowC.push(<TaskC task={t} key={t.name} handleComplete={this.props.handleComplete}
           handleRemove={this.props.handleRemove}
             />)
         }else{
+          if (this.props.filterText && t.name.indexOf(this.props.filterText) ===-1) {
+            return;
+          }
           rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
             handleRemove={this.props.handleRemove}
             />)

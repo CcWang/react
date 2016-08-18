@@ -1,16 +1,52 @@
 #todoList{
-  font-size: 20px;
+  font-family: 'Denk One',sans-serif;
 
 }
+#alarm {
+	margin-top:10px; 
+}
+#alarm p{
+	color: red;
+}
+#addTask{
+	margin: 20px auto;
+}
+#addTask *{
+	margin: 5px;
+	font-size: 1.1em;
+}
+#addTask button {
+	color: white;
+	background:#0069D6;
+	padding: 2px 15px;
+	opacity: 0.7;
+}
+#addTask button:hover {
+	opacity: 1;
+}
+#addTask input {
+	width: 200px;
+}
 .completed {
-  text-decoration: line-through;
+
+  background-color:lightblue;
+}
+.completed:nth-child(2){
+	  text-decoration: line-through;
+	    opacity: 0.8;
+}
+.completed .cc{
+	text-decoration: line-through;
+	    opacity: 0.8;
 }
 .glyphicon {
   opacity: 0.5;
 }
 #searchBar *{
-  display: inline-block;
-  padding: 10px;
+	display: inline-block;
+	padding: 2px;
+	margin: 5px;
+	font-size: 1.1em;
 }
 #todoList {
   width: 800px;
@@ -19,4 +55,17 @@
 #todoList table{
   width: 500px;
   margin: 20px auto;
+  font-size: 20px;
+}
+span:hover{
+	cursor: pointer;
+
+}
+.glyphicon-ok:hover{
+	color:#3071A9;
+	opacity: 1;
+}
+.glyphicon-remove:hover{
+	color: red;
+	opacity: 1;
 }

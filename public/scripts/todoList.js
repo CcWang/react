@@ -1,13 +1,20 @@
 var WholeList = React.createClass({
   getInitialState:function(){
     return{
-      tasksList:[],
+      tasksList:[{"name":"task1","completed":false}],
       showComplete:false,
       showUncomplete:false,
-      filterText:''
+      filterText:'',
+      msg:''
     };
   },
   handleAddTask:function(taskName){
+    if(!taskName){
+      this.setState({
+      msg:'Did you enter any task??'
+      })
+      return;
+    }
     var newTask={'name':taskName,'completed':false}
     var tasksListNew = this.state.tasksList
     tasksListNew.push(newTask)
@@ -60,20 +67,11 @@ var WholeList = React.createClass({
     return (
       <div>
         <h2>What is your main focus for today?</h2>
+        <Alarm msg={this.state.msg}/>
         <div>
           <AddTask
           tasksList={this.state.tasksList} handleAddTask={this.handleAddTask}
         />
-        </div>
-        <div id="todoList">
-          <TodoList
-            tasksList={this.state.tasksList}
-            handleComplete={this.handleComplete}
-            handleRemove={this.handleRemove}
-            showComplete={this.state.showComplete}
-            showUncomplete={this.state.showUncomplete}
-            filterText={this.state.filterText}
-          />
         </div>
         <div>
           <SearchBar
@@ -86,6 +84,25 @@ var WholeList = React.createClass({
           handleFilter={this.handleFilter}
           />
         </div>
+        <div id="todoList">
+          <TodoList
+            tasksList={this.state.tasksList}
+            handleComplete={this.handleComplete}
+            handleRemove={this.handleRemove}
+            showComplete={this.state.showComplete}
+            showUncomplete={this.state.showUncomplete}
+            filterText={this.state.filterText}
+          />
+        </div>
+      </div>
+    );
+  }
+});
+var Alarm = React.createClass({
+  render:function(){
+    return(
+      <div id='alarm'>
+      <p>{this.props.msg}</p>
       </div>
     );
   }
@@ -106,7 +123,7 @@ var SearchBar=React.createClass({
         <div id='searchBar'>
         <input
         type='text'
-        placeholder='Search your to do list...'
+        placeholder='Search ...'
         value={this.props.filterText}
         ref='filterText'
         onChange={this.filter}
@@ -146,9 +163,10 @@ var TodoList=React.createClass({
           if (this.props.filterText && t.name.indexOf(this.props.filterText) ===-1 ) {
             return;
           }
-          rowC.push(<TaskC task={t} key={t.name} handleComplete={this.props.handleComplete}
-          handleRemove={this.props.handleRemove}
+          rowC.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
+          handleRemove={this.props.handleRemove} taskClass={'completed'}
             />)
+          
         }else{
           if (this.props.filterText && t.name.indexOf(this.props.filterText) ===-1) {
             return;
@@ -171,7 +189,7 @@ var TodoList=React.createClass({
     };
     return(
       <div>
-        <table className="table table-hover">
+        <table className="table">
           <tbody>
           {rows}
           </tbody>
@@ -180,7 +198,7 @@ var TodoList=React.createClass({
     );
   }
 });
-var Task = React.createClass({
+var Task = React.createClass({ 
   handleRemove:function(){
     this.props.handleRemove(this.props.task.name)
   },
@@ -189,48 +207,17 @@ var Task = React.createClass({
   },
   render:function () {
     return(
-      <tr>
+      <tr className={this.props.taskClass}>
         <td>
           <span
             className='glyphicon glyphicon-ok'
             onClick={this.handleComplete}>
           </span>
         </td>
-        <td>
+        <td className="cc">
           {this.props.task.name}
         </td>
         <td>
-          <span
-            className='glyphicon glyphicon-remove'
-            onClick={this.handleRemove}>
-
-          </span>
-        </td>
-      </tr>
-    );
-  }
-});
-var TaskC = React.createClass({
-  handleRemove:function(){
-    this.props.handleRemove(this.props.task.name)
-  },
-  handleComplete:function(){
-    this.props.handleComplete(this.props.task.name);
-  },
-  render:function () {
-    return(
-      <tr style={{'backgroundColor':'lightblue'}} className="completed">
-        <td>
-          <span
-            className='glyphicon glyphicon-ok'
-            onClick={this.handleComplete}
-            >
-          </span>
-          </td>
-          <td>
-           {this.props.task.name}
-          </td>
-          <td>
           <span
             className='glyphicon glyphicon-remove'
             onClick={this.handleRemove}>
@@ -248,13 +235,21 @@ var AddTask = React.createClass({
     //console.log(this.refs.newTaskName.value)
     this.refs.newTaskName.value=''
   },
+  handleEnter:function(e){
+
+    if (e.charCode == 13) {
+        this.props.handleAddTask(this.refs.newTaskName.value);
+         this.refs.newTaskName.value=''
+      }
+  },
   render:function(){
     return(
-      <div>
+      <div id="addTask">
         <input type='text'
           placeholder='add task..' value={this.props.newTaskName}
-          ref="newTaskName"/>
-        <button className="btn btn-primary" onClick={this.handleChange}>Add </button>
+          ref="newTaskName"
+          onKeyPress={this.handleEnter}/>
+        <button onClick={this.handleChange} >Add </button>
       </div>
     )
   }

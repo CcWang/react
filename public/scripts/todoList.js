@@ -59,27 +59,33 @@ var WholeList = React.createClass({
   render:function(){
     return (
       <div>
-      <h1> This is TO DO List </h1>
-      <SearchBar
-        tasksList={this.state.tasksList}
-        showComplete={this.state.showComplete}
-        showUncomplete={this.state.showUncomplete}
-        handleShowComplete={this.handleShowComplete}
-        handleShowUncomplete={this.handleShowUncomplete}
-        filterText={this.state.filterText}
-        handleFilter={this.handleFilter}
+        <h2>What is your main focus for today?</h2>
+        <div>
+          <AddTask
+          tasksList={this.state.tasksList} handleAddTask={this.handleAddTask}
         />
-      <TodoList
-        tasksList={this.state.tasksList}
-        handleComplete={this.handleComplete}
-        handleRemove={this.handleRemove}
-        showComplete={this.state.showComplete}
-        showUncomplete={this.state.showUncomplete}
-        filterText={this.state.filterText}
-      />
-      <AddTask
-        tasksList={this.state.tasksList} handleAddTask={this.handleAddTask}
-      />
+        </div>
+        <div id="todoList">
+          <TodoList
+            tasksList={this.state.tasksList}
+            handleComplete={this.handleComplete}
+            handleRemove={this.handleRemove}
+            showComplete={this.state.showComplete}
+            showUncomplete={this.state.showUncomplete}
+            filterText={this.state.filterText}
+          />
+        </div>
+        <div>
+          <SearchBar
+          tasksList={this.state.tasksList}
+          showComplete={this.state.showComplete}
+          showUncomplete={this.state.showUncomplete}
+          handleShowComplete={this.handleShowComplete}
+          handleShowUncomplete={this.handleShowUncomplete}
+          filterText={this.state.filterText}
+          handleFilter={this.handleFilter}
+          />
+        </div>
       </div>
     );
   }
@@ -95,8 +101,9 @@ var SearchBar=React.createClass({
     this.props.handleFilter(this.refs.filterText.value)
   },
   render:function(){
-    return(
-      <form>
+    if (this.props.tasksList.length >=1) {
+      return(
+        <div id='searchBar'>
         <input
         type='text'
         placeholder='Search your to do list...'
@@ -105,12 +112,12 @@ var SearchBar=React.createClass({
         onChange={this.filter}
         />
         <p>
-          <input type='checkbox'
-          checked={this.props.showComplete}
-          ref='checkedComplete'
-          onChange={this.handleComplete}
-          />
-          Only show completed
+        <input type='checkbox'
+        checked={this.props.showComplete}
+        ref='checkedComplete'
+        onChange={this.handleComplete}
+        />
+        Only show completed
         </p>
         <p>
         <input type='checkbox'
@@ -118,10 +125,14 @@ var SearchBar=React.createClass({
         ref='checkedUncomplete'
         onChange={this.handleUncomplete}
         />
-          Only show uncompleted
+        Only show uncompleted
         </p>
-      </form>
-    );
+        </div>
+      );
+
+    }else{
+      return null
+    }
   }
 });
 var TodoList=React.createClass({
@@ -159,11 +170,13 @@ var TodoList=React.createClass({
       };
     };
     return(
-      <table>
-        <tbody>
-        {rows}
-        </tbody>
-      </table>
+      <div>
+        <table className="table table-hover">
+          <tbody>
+          {rows}
+          </tbody>
+        </table>
+      </div>
     );
   }
 });
@@ -181,7 +194,12 @@ var Task = React.createClass({
           <span
             className='glyphicon glyphicon-ok'
             onClick={this.handleComplete}>
-          </span> {this.props.task.name}
+          </span>
+        </td>
+        <td>
+          {this.props.task.name}
+        </td>
+        <td>
           <span
             className='glyphicon glyphicon-remove'
             onClick={this.handleRemove}>
@@ -201,13 +219,18 @@ var TaskC = React.createClass({
   },
   render:function () {
     return(
-      <tr style={{'backgroundColor':'lightblue'}}>
-        <td className="completed" >
+      <tr style={{'backgroundColor':'lightblue'}} className="completed">
+        <td>
           <span
             className='glyphicon glyphicon-ok'
             onClick={this.handleComplete}
             >
-          </span> {this.props.task.name}
+          </span>
+          </td>
+          <td>
+           {this.props.task.name}
+          </td>
+          <td>
           <span
             className='glyphicon glyphicon-remove'
             onClick={this.handleRemove}>
@@ -237,6 +260,7 @@ var AddTask = React.createClass({
   }
 });
 ReactDOM.render(
+
   <WholeList />,
   document.getElementById('todoList')
 )

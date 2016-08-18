@@ -64,9 +64,3 @@ ul {
   font-weight: bold;
   font-style: italic;
 }
-.completed {
-  text-decoration: line-through;
-}
-.glyphicon {
-  opacity: 0.5;
-}

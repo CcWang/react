@@ -1,0 +1,22 @@
+#todoList{
+  font-size: 20px;
+
+}
+.completed {
+  text-decoration: line-through;
+}
+.glyphicon {
+  opacity: 0.5;
+}
+#searchBar *{
+  display: inline-block;
+  padding: 10px;
+}
+#todoList {
+  width: 800px;
+  margin: 20px auto;
+}
+#todoList table{
+  width: 500px;
+  margin: 20px auto;
+}

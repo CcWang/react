@@ -3,7 +3,7 @@
 
 }
 #alarm {
-	margin-top:10px; 
+	margin-top:10px;
 }
 #alarm p{
 	color: red;
@@ -68,4 +68,9 @@ span:hover{
 .glyphicon-remove:hover{
 	color: red;
 	opacity: 1;
+}
+
+.proOne{
+  color:red;
+  /*background-color: red;*/
 }

@@ -1,7 +1,7 @@
 var WholeList = React.createClass({
   getInitialState:function(){
     return{
-      tasksList:[{"name":"task1","completed":false}],
+      tasksList:[{"name":"task1","completed":false,"pro":false}],
       showComplete:false,
       showUncomplete:false,
       filterText:'',
@@ -15,7 +15,7 @@ var WholeList = React.createClass({
       })
       return;
     }
-    var newTask={'name':taskName,'completed':false}
+    var newTask={'name':taskName,'completed':false,"pro":false}
     var tasksListNew = this.state.tasksList
     tasksListNew.push(newTask)
     this.setState({
@@ -63,6 +63,19 @@ var WholeList = React.createClass({
       filterText:text
     })
   },
+  handlePro:function(level,taskName){
+    console.log(level)
+    var tasksListNew=this.state.tasksList
+    tasksListNew.forEach(function(p){
+      if (p.name ===taskName){
+        p.pro = level
+      }
+    });
+    this.setState({
+      tasksList:tasksListNew
+    })
+
+  },
   render:function(){
     return (
       <div>
@@ -89,9 +102,11 @@ var WholeList = React.createClass({
             tasksList={this.state.tasksList}
             handleComplete={this.handleComplete}
             handleRemove={this.handleRemove}
+            handlePro={this.handlePro}
             showComplete={this.state.showComplete}
             showUncomplete={this.state.showUncomplete}
             filterText={this.state.filterText}
+
           />
         </div>
       </div>
@@ -162,28 +177,55 @@ var TodoList=React.createClass({
         if (t.completed){
           if (this.props.filterText && t.name.indexOf(this.props.filterText) ===-1 ) {
             return;
+          }else{
+            console.log(t.pro)
+            if(t.pro){
+              if(t.pro ===1){
+              rowC.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
+                handleRemove={this.props.handleRemove} handlePro={this.props.handlePro} taskClass={'completed'}
+                styleName={'proOne'}
+
+                />)
+              }
+            }else{
+              rowC.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
+                handleRemove={this.props.handleRemove} handlePro={this.props.handlePro} taskClass={'completed'}
+
+                />)
+
+            }
           }
-          rowC.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
-          handleRemove={this.props.handleRemove} taskClass={'completed'}
-            />)
-          
+
         }else{
           if (this.props.filterText && t.name.indexOf(this.props.filterText) ===-1) {
             return;
+          }else{
+            if(t.pro){
+              if(t.pro===1){
+                rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete} handlePro={this.props.handlePro}
+                  handleRemove={this.props.handleRemove}
+                  />)
+              }
+            }else{
+              rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete} handlePro={this.props.handlePro}
+                handleRemove={this.props.handleRemove}
+                styleName={"proOne"}
+                />)
+            }
           }
-          rowU.push(<Task task={t} key={t.name} handleComplete={this.props.handleComplete}
-            handleRemove={this.props.handleRemove}
-            />)
+
         }
       }.bind(this));
       if (this.props.showUncomplete && this.props.showComplete ) {
         rows=[]
       }else if (this.props.showComplete) {
+        console.log(rowC);
         rows=rowC
       }else if(this.props.showUncomplete){
         rows=rowU
 
       }else{
+        console.log(rowU);
         rows.push(rowU,rowC)
       };
     };
@@ -198,16 +240,26 @@ var TodoList=React.createClass({
     );
   }
 });
-var Task = React.createClass({ 
+var Task = React.createClass({
   handleRemove:function(){
     this.props.handleRemove(this.props.task.name)
   },
   handleComplete:function(){
     this.props.handleComplete(this.props.task.name);
   },
+  handlePro:function(level){
+    this.props.handlePro(level,this.props.task.name);
+  },
   render:function () {
     return(
       <tr className={this.props.taskClass}>
+        <td>
+          <p>
+            <span className={this.props.styleName} onClick={()=>this.handlePro(1)}>! | </span>
+            <span> !! | </span>
+            <span> !!! </span>
+          </p>
+        </td>
         <td>
           <span
             className='glyphicon glyphicon-ok'
